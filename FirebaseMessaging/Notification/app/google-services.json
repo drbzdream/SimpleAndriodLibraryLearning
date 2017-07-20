@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "166370872158",
+    "firebase_url": "https://notificatonmessaging.firebaseio.com",
+    "project_id": "notificatonmessaging",
+    "storage_bucket": "notificatonmessaging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166370872158:android:169c9f1b682689c3",
+        "android_client_info": {
+          "package_name": "com.example.titivoradac.notificationmessaging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166370872158-rs8m952l3j0kmqp0o3jvdk00ge4vecfr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuhYhEkgu1Xw-gosVPD8H5TetHZifTX2Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
