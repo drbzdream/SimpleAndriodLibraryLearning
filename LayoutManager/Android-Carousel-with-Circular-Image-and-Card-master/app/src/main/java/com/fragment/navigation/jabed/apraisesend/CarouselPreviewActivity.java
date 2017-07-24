@@ -1,7 +1,6 @@
 package com.fragment.navigation.jabed.apraisesend;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +36,7 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         Toolbar tbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tbar);
 
-        final HorizontalAdaptar adapter = new HorizontalAdaptar(this, imageViews, textViews);
+        final HorizontalAdapter adapter = new HorizontalAdapter(this, imageViews, textViews);
 
         RecyclerView rh = (RecyclerView) findViewById(R.id.list_horizontal);
         initRecyclerView(rh, new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false), adapter);
@@ -46,7 +45,7 @@ public class CarouselPreviewActivity extends AppCompatActivity {
 
     }
 
-    private void initRecyclerView(final RecyclerView recyclerView, final CarouselLayoutManager layoutManager, final HorizontalAdaptar adapter) {
+    private void initRecyclerView(final RecyclerView recyclerView, final CarouselLayoutManager layoutManager, final HorizontalAdapter adapter) {
         // enable zoom effect. this line can be customized
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 
@@ -85,7 +84,7 @@ public class CarouselPreviewActivity extends AppCompatActivity {
     }
 
 
-    private static final class HorizontalAdaptar extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final class HorizontalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @SuppressWarnings("UnsecureRandomNumberGeneration")
         private final int[] mPosition;
@@ -116,7 +115,7 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         ImageView[] imageViews;
         TextView[] textViews;
 
-        HorizontalAdaptar(Context context, ImageView[] ImageViews, TextView[] TextView) {
+        HorizontalAdapter(Context context, ImageView[] ImageViews, TextView[] TextView) {
             this.context = context;
             this.imageViews = ImageViews;
             this.textViews = TextView;
@@ -166,7 +165,7 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         public RowNewsViewHolder(View itemView) {
             super(itemView);
 
-            logo_name = (TextView) itemView.findViewById(R.id.c_item_1);
+            logo_name = (TextView) itemView.findViewById(R.id.name_item);
             logo_img = (ImageView) itemView.findViewById(R.id.profilePicture);
 
         }
