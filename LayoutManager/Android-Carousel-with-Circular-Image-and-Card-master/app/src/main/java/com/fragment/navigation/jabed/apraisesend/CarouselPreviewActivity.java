@@ -26,8 +26,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CarouselPreviewActivity extends AppCompatActivity {
 
     public static int INVALID_POSITION = -1;
-    private ImageView line_img;
 
+    public static String temp = "";
+    //private TextView showPosition;
+    public static  ImageView line_img;
+
+    // Todo: update this
+    ImageView[] imageViews = new ImageView[3];
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,7 +45,7 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         Toolbar tbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tbar);
 
-        final HorizontalAdaptar adapter = new HorizontalAdaptar(this);
+        final HorizontalAdaptar adapter = new HorizontalAdaptar(this, imageViews);
 
         // dream
         //final VerticalAdaptar verticalAdaptar= new VerticalAdaptar(this);
@@ -51,8 +56,9 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         initRecyclerView(rh, new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false), adapter);
 
 
-        //dream
+
         line_img = (ImageView) findViewById(R.id.image_line);
+
         //line_img.setImageResource(R.drawable.line_ali);
 
 
@@ -81,40 +87,30 @@ public class CarouselPreviewActivity extends AppCompatActivity {
                     adapter.mPosition[adapterPosition] = (value % 10) + (value / 10 + 1) * 10;
                     adapter.notifyItemChanged(adapterPosition);
                 }
-            }
-        });
-    }
 
-    private void initVerRecyclerView(final RecyclerView recyclerView, final CarouselLayoutManager layoutManager, final HorizontalAdaptar adapter) {
-        // enable zoom effect. this line can be customized
-        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+                //ImageView test = (ImageView) findViewById(R.id.profilePicture);
+                //test.setAlpha(1.0f);
+                Log.i("check","" + adapterPosition);
 
-        recyclerView.setLayoutManager(layoutManager);
-        // we expect only fixed sized item for now
-        recyclerView.setHasFixedSize(true);
-        // sample adapter with random data
-        recyclerView.setAdapter(adapter);
-        // enable center post scrolling
-        recyclerView.addOnScrollListener(new CenterScrollListener());
+                // Test
+                for (int i=0; i<imageViews.length; ++i) {
 
-        layoutManager.addOnItemSelectionListener(new CarouselLayoutManager.OnCenterItemSelectionListener() {
-
-            @Override
-            public void onCenterItemChanged(final int adapterPosition) {
-                if (INVALID_POSITION != adapterPosition) {
-                    final int value = adapter.mPosition[adapterPosition];
-                    adapter.mPosition[adapterPosition] = (value % 10) + (value / 10 + 1) * 10;
-                    adapter.notifyItemChanged(adapterPosition);
+                    if (i == adapterPosition)
+                        imageViews[i].setAlpha(1.0f);
+                    else
+                        imageViews[i].setAlpha(0.5f);
                 }
             }
         });
     }
 
+//    }
+
     private static final class HorizontalAdaptar extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @SuppressWarnings("UnsecureRandomNumberGeneration")
-        private final Random mRandom = new Random();
-        private final int[] mColors;
+       // private final Random mRandom = new Random();
+        //private final int[] mColors;
         private final int[] mPosition;
         private Context context;
 
@@ -132,20 +128,27 @@ public class CarouselPreviewActivity extends AppCompatActivity {
 
         };
 
+        private  final int[] imageLine = {
+                R.drawable.line_kplus,
+                R.drawable.line_ali,
+                R.drawable.line_wechatpay,
+            };
 
         private int mItemsCount = 3;
         LayoutInflater inflater;
+        ImageView[] imageViews;
 
-        HorizontalAdaptar(Context context) {
+        HorizontalAdaptar(Context context, ImageView[] ImageViews) {
             this.context = context;
+            this.imageViews = ImageViews;
 
             this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mColors = new int[3];
+            //mColors = new int[3];
             mPosition = new int[3];
 
             for (int i = 0; i < 3; ++i) {
                 //noinspection MagicNumber
-                mColors[i] = Color.argb(255, mRandom.nextInt(256), mRandom.nextInt(256), mRandom.nextInt(256));
+               // mColors[i] = Color.argb(255, mRandom.nextInt(256), mRandom.nextInt(256), mRandom.nextInt(256));
                 mPosition[i] = i;
 
             }
@@ -166,13 +169,22 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             ((RowNewsViewHolder) holder).cItem1.setText(title[position]);
-
             ((RowNewsViewHolder) holder).pp.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), image[position], null));
 
+            // Assign image view index
+            imageViews[position] = ((RowNewsViewHolder) holder).pp;
+
+            //((RowNewsViewHolder) holder).pp.setAlpha(1.0f);
             //((RowNewsViewHolder) holder).pp.setBackgroundResource(image[position]);
             //((RowNewsViewHolder) holder).cItem2.setText(String.valueOf(mPosition[position]));
 
             //holder.itemView.setBackgroundColor(mColors[position]);
+
+
+            temp = Integer.toString(position);
+            line_img.setImageResource(imageLine[position]);
+            //((RowNewsViewHolder) holder).showPosition.setText(temp);
+            //((RowNewsViewHolder) holder).line_img.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), imageLine[position], null));
         }
 
         @Override
@@ -186,7 +198,9 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         //CircleImageView apraisorProfilePic;
         TextView cItem1;
         ImageView pp;
+        //TextView showPosition;
 
+        //ImageView line_img;
 
         public RowNewsViewHolder(View itemView) {
             super(itemView);
@@ -195,103 +209,12 @@ public class CarouselPreviewActivity extends AppCompatActivity {
             pp = (ImageView) itemView.findViewById(R.id.profilePicture);
             // cItem2 = (TextView) itemView.findViewById(R.id.c_item_2);
 
+
+            //dream
+            //line_img = (ImageView) itemView.findViewById(R.id.image_line);
+            //showPosition = (TextView) itemView.findViewById(R.id.showposition);
+
         }
     }
 
-
-    // Card view
-
-//    private static final class VerticalAdaptar extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-//
-//        @SuppressWarnings("UnsecureRandomNumberGeneration")
-//        private final Random mRandom = new Random();
-//        private final int[] mColors;
-//        private final int[] mPosition;
-//        private final int[] image;
-//        private int mItemsCount = 10;
-//        LayoutInflater inflater;
-//
-//        private final String[] card_title={
-//                "Customer focus/ customer service",
-//                "Change management",
-//                "Self improvement",
-//                "Teamwork",
-//                "Goal setting",
-//                "Coaching and teaching",
-//                "Time management",
-//                "Decision making/ Problem solving",
-//                "Valuing diversity",
-//                "Initiative",
-//
-//        };
-//        private final String[] card_desc={
-//                "Ability to understand customers’ problems, follow-up and solve their problems in a manner that increases customer satisfaction.",
-//                "Adaptability to uncertainty and ambiguity by understanding and planning for change, managing resistance to change, and implementing change.",
-//                "Continuously learning and actively acquiring new skill to develop one self as well as applying new skill quickly.",
-//                "Consistently encourage a work environment in which individuals feel free to work together with others and to share information and ideas in a context of mutual respect and trust.",
-//                "Sets individual goals that are realistic and achievable, and aligns to company goals.",
-//                "Structures learning effectively and motivate others positively by providing practice and feedback.",
-//                "Effectively balance task and responsibility, assesses priorities daily and prioritize based on company needs.",
-//                "Able to identify key issues in complex situation, analyze problems and make sound decisions, and assume accountability for own actions.",
-//                "Understanding of cultural differences among colleagues and valuing their input towards company objectives.",
-//                "Proactive in generating ideas for improvement, solving problems without being asked and takes advantage of opportunities as they arises.",
-//
-//        };
-//
-//        VerticalAdaptar(Context context) {
-//
-//            this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            mColors = new int[10];
-//            mPosition = new int[10];
-//            image = new int[10];
-//            for (int i = 0; 10 > i; ++i) {
-//                //noinspection MagicNumber
-//                mColors[i] = Color.argb(255, mRandom.nextInt(256), mRandom.nextInt(256), mRandom.nextInt(256));
-//                mPosition[i] = i;
-//
-//            }
-//
-//        }
-//
-//        @Override
-//        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//
-//
-//            View view = inflater.inflate( R.layout.item_card, null) ;
-//            RecyclerView.ViewHolder holder = new RowVerNewsViewHolder(view);
-//            return holder;
-//
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-//            ((RowVerNewsViewHolder) holder).cItem1.setText(card_title[position]);
-//            ((RowVerNewsViewHolder) holder).cItem2.setText(card_desc[position]);
-//
-//            //holder.itemView.setBackgroundColor(mColors[position]);
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return mItemsCount;
-//        }
-//    }
-
-
-
-
-//    public static class RowVerNewsViewHolder extends RecyclerView.ViewHolder {
-//        CircleImageView apraisorProfilePic;
-//        TextView cItem1;
-//        TextView cItem2;
-//
-//
-//        public RowVerNewsViewHolder(View itemView) {
-//            super(itemView);
-//
-//            cItem1 = (TextView) itemView.findViewById(R.id.skillTitle);
-//             cItem2 = (TextView) itemView.findViewById(R.id.skillDetails);
-//
-//        }
-//    }
 }
