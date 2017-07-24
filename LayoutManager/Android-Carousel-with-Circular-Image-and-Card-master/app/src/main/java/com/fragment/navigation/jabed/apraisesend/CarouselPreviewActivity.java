@@ -19,50 +19,30 @@ import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.azoft.carousellayoutmanager.CenterScrollListener;
 
 
-import java.util.Random;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class CarouselPreviewActivity extends AppCompatActivity {
 
     public static int INVALID_POSITION = -1;
 
-    public static String temp = "";
-    //private TextView showPosition;
     public static  ImageView line_img;
 
     // Todo: update this
     ImageView[] imageViews = new ImageView[3];
+    TextView[] textViews = new TextView[3];
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_carousel_preview);
-
-        //final ActivityCarouselPreviewBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_carousel_preview);
 
         Toolbar tbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tbar);
 
-        final HorizontalAdaptar adapter = new HorizontalAdaptar(this, imageViews);
-
-        // dream
-        //final VerticalAdaptar verticalAdaptar= new VerticalAdaptar(this);
+        final HorizontalAdaptar adapter = new HorizontalAdaptar(this, imageViews, textViews);
 
         RecyclerView rh = (RecyclerView) findViewById(R.id.list_horizontal);
-        //RecyclerView rv = (RecyclerView) findViewById(R.id.list_vertical);
-        // create layout manager with needed params: vertical, cycle
         initRecyclerView(rh, new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false), adapter);
-
-
-
         line_img = (ImageView) findViewById(R.id.image_line);
 
-        //line_img.setImageResource(R.drawable.line_ali);
-
-
-        //initVerRecyclerView(rv, new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false), verticalAdaptar);
 
     }
 
@@ -88,29 +68,26 @@ public class CarouselPreviewActivity extends AppCompatActivity {
                     adapter.notifyItemChanged(adapterPosition);
                 }
 
-                //ImageView test = (ImageView) findViewById(R.id.profilePicture);
-                //test.setAlpha(1.0f);
                 Log.i("check","" + adapterPosition);
 
                 // Test
                 for (int i=0; i<imageViews.length; ++i) {
-
-                    if (i == adapterPosition)
+                    if (i == adapterPosition) {
                         imageViews[i].setAlpha(1.0f);
-                    else
-                        imageViews[i].setAlpha(0.5f);
+                        textViews[i].setAlpha(1.0f);
+                    } else {
+                        imageViews[i].setAlpha(0.3f);
+                        textViews[i].setAlpha(0.3f);
+                    }
                 }
             }
         });
     }
 
-//    }
 
     private static final class HorizontalAdaptar extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @SuppressWarnings("UnsecureRandomNumberGeneration")
-       // private final Random mRandom = new Random();
-        //private final int[] mColors;
         private final int[] mPosition;
         private Context context;
 
@@ -137,18 +114,18 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         private int mItemsCount = 3;
         LayoutInflater inflater;
         ImageView[] imageViews;
+        TextView[] textViews;
 
-        HorizontalAdaptar(Context context, ImageView[] ImageViews) {
+        HorizontalAdaptar(Context context, ImageView[] ImageViews, TextView[] TextView) {
             this.context = context;
             this.imageViews = ImageViews;
+            this.textViews = TextView;
 
             this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            //mColors = new int[3];
             mPosition = new int[3];
 
             for (int i = 0; i < 3; ++i) {
                 //noinspection MagicNumber
-               // mColors[i] = Color.argb(255, mRandom.nextInt(256), mRandom.nextInt(256), mRandom.nextInt(256));
                 mPosition[i] = i;
 
             }
@@ -158,8 +135,6 @@ public class CarouselPreviewActivity extends AppCompatActivity {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-
             View view = inflater.inflate(R.layout.item_view, null);
             RecyclerView.ViewHolder holder = new RowNewsViewHolder(view);
             return holder;
@@ -168,23 +143,13 @@ public class CarouselPreviewActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            ((RowNewsViewHolder) holder).cItem1.setText(title[position]);
-            ((RowNewsViewHolder) holder).pp.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), image[position], null));
-
-            // Assign image view index
-            imageViews[position] = ((RowNewsViewHolder) holder).pp;
-
-            //((RowNewsViewHolder) holder).pp.setAlpha(1.0f);
-            //((RowNewsViewHolder) holder).pp.setBackgroundResource(image[position]);
-            //((RowNewsViewHolder) holder).cItem2.setText(String.valueOf(mPosition[position]));
-
-            //holder.itemView.setBackgroundColor(mColors[position]);
-
-
-            temp = Integer.toString(position);
+            ((RowNewsViewHolder) holder).logo_name.setText(title[position]);
+            ((RowNewsViewHolder) holder).logo_img.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), image[position], null));
             line_img.setImageResource(imageLine[position]);
-            //((RowNewsViewHolder) holder).showPosition.setText(temp);
-            //((RowNewsViewHolder) holder).line_img.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), imageLine[position], null));
+
+            // Assign image view and text view index
+            imageViews[position] = ((RowNewsViewHolder) holder).logo_img;
+            textViews[position] = ((RowNewsViewHolder) holder).logo_name;
         }
 
         @Override
@@ -195,24 +160,14 @@ public class CarouselPreviewActivity extends AppCompatActivity {
 
 
     public static class RowNewsViewHolder extends RecyclerView.ViewHolder {
-        //CircleImageView apraisorProfilePic;
-        TextView cItem1;
-        ImageView pp;
-        //TextView showPosition;
-
-        //ImageView line_img;
+        TextView logo_name;
+        ImageView logo_img;
 
         public RowNewsViewHolder(View itemView) {
             super(itemView);
 
-            cItem1 = (TextView) itemView.findViewById(R.id.c_item_1);
-            pp = (ImageView) itemView.findViewById(R.id.profilePicture);
-            // cItem2 = (TextView) itemView.findViewById(R.id.c_item_2);
-
-
-            //dream
-            //line_img = (ImageView) itemView.findViewById(R.id.image_line);
-            //showPosition = (TextView) itemView.findViewById(R.id.showposition);
+            logo_name = (TextView) itemView.findViewById(R.id.c_item_1);
+            logo_img = (ImageView) itemView.findViewById(R.id.profilePicture);
 
         }
     }
