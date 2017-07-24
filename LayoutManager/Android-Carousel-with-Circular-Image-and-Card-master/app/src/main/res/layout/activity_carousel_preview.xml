@@ -57,9 +57,6 @@
             android:src="@drawable/line_kplus" />
 
 
-        <!--&lt;!&ndash;android:src="@drawable/line_kplus"&ndash;&gt;-->
-
-
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
